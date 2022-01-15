@@ -1,17 +1,17 @@
 <template>
 <div>
   <a-row style="height: 80%">
-    <a-col span="24">
+    <a-col span="8">
       <a-list item-layout="horizontal" :data-source="data">
         <a-list-item slot="renderItem" slot-scope="item">
           <a-list-item-meta
-              description="描述"
+              :description="item.time"
           >
-            <a slot="title">{{ item.title }}</a>
-<!--            <div slot="title" v-html="item.title"></div>-->
+<!--            <img src="item.msgContent" v-if="item.msgContent.indexOf('base64')>0" style="width: 20px;height: 20px"/>-->
+            <a slot="title">{{ item.msgContent }}</a>
             <a-avatar
                 slot="avatar"
-                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                :src="item.avatar"
             />
           </a-list-item-meta>
         </a-list-item>
@@ -22,8 +22,15 @@
     <a-col span="17" offset="2">
       <div style="display: flex;flex-direction: column">
         <div style="display: flex">
-<!--          <emoji-icon @select="selectIcon" :iconConfig="iconConfig"></emoji-icon>-->
-          <a-button type="primary" shape="circle" icon="cloud-upload"/>
+          <a-upload
+              name="file"
+              listType="picture"
+              :before-upload="beforeUpload"
+              @change="uploadFile"
+              style="display: flex"
+          >
+            <a-button type="primary" shape="circle" icon="cloud-upload"/>
+          </a-upload>
           <a-button type="primary" shape="circle" icon="smile" @click="()=>this.showEmoji=!this.showEmoji"/>
           <a-popover
               trigger="hover"
@@ -49,20 +56,7 @@
 import wsUrl from "@/api/base";
 // import {getImageBytes} from "@/utils";
 
-const data = [
-  {
-    title: '消息1',
-  },
-  {
-    title: '消息 2',
-  },
-  {
-    title: '消息 3',
-  },
-  {
-    title: '消息 4',
-  },
-];
+const data = [];
 export default {
   name: "chat",
   data(){
@@ -110,13 +104,13 @@ export default {
       this.socket.send(this.msg)
     },
     socketGetMsg(msg){
-      console.log(msg)
-      if (msg!='hb_request' && msg.data!='heartBeat')
-      this.data.push({
-        title: msg.data
-      })
-      this.heartCheck.reset()
-      this.heartCheck.start()
+      let data= JSON.parse(msg.data)
+      if (data.msgContent!='hb_request' && data.msgContent!='heartBeat'){
+        this.data.push(data)
+        this.heartCheck.reset()
+        this.heartCheck.start()
+      }
+
     },
     socketClose(){
       console.warn('链接关闭')
@@ -158,6 +152,12 @@ export default {
     },
     selectEmoji(e){
       this.msg+=e.data
+    },
+    uploadFile(info){
+      this.msg+=info.fileList[0].thumbUrl
+    },
+    beforeUpload(file){
+      console.log(typeof (file));
     }
   }
 }
