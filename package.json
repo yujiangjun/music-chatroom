@@ -10,8 +10,11 @@
   "dependencies": {
     "ant-design-vue": "^1.7.8",
     "core-js": "^3.6.5",
+    "si-grenoble": "^0.6.0",
+    "v-emoji-picker": "^2.3.3",
     "vue": "^2.6.11",
-    "vue-router": "^3.5.3"
+    "vue-router": "^3.5.3",
+    "vuejs-emoji": "^0.1.8"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

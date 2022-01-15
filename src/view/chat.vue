@@ -7,7 +7,8 @@
           <a-list-item-meta
               description="描述"
           >
-            <a slot="title" href="https://www.antdv.com/">{{ item.title }}</a>
+            <a slot="title">{{ item.title }}</a>
+<!--            <div slot="title" v-html="item.title"></div>-->
             <a-avatar
                 slot="avatar"
                 src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
@@ -19,7 +20,23 @@
   </a-row>
   <a-row>
     <a-col span="17" offset="2">
-      <a-textarea placeholder="请输入。。。。" :rows="4" v-model="msg"/>
+      <div style="display: flex;flex-direction: column">
+        <div style="display: flex">
+<!--          <emoji-icon @select="selectIcon" :iconConfig="iconConfig"></emoji-icon>-->
+          <a-button type="primary" shape="circle" icon="cloud-upload"/>
+          <a-button type="primary" shape="circle" icon="smile" @click="()=>this.showEmoji=!this.showEmoji"/>
+          <a-popover
+              trigger="hover"
+              :visible="showEmoji"
+              @visibleChange="()=>this.showEmoji=!this.showEmoji"
+          >
+            <div slot="content">
+              <VEmojiPicker @select="selectEmoji" v-if="showEmoji"/>
+            </div>
+          </a-popover>
+        </div>
+        <a-textarea placeholder="请输入。。。。" :rows="4" v-model="msg"/>
+      </div>
     </a-col>
     <a-col span="2" offset="1">
       <a-button type="primary" style="border-radius: 5px" @click="sendMsg">发送</a-button>
@@ -30,6 +47,8 @@
 
 <script>
 import wsUrl from "@/api/base";
+// import {getImageBytes} from "@/utils";
+
 const data = [
   {
     title: '消息1',
@@ -51,6 +70,7 @@ export default {
       data,
       msg:'',
       socket: null,
+      showEmoji: false, //显示emoji弹框
       heartCheck:{
         timeout:5000,
         timeoutObj:null,
@@ -135,6 +155,9 @@ export default {
           this.socket.close()
         },self.timeout)
       },this.heartCheck.timeout)
+    },
+    selectEmoji(e){
+      this.msg+=e.data
     }
   }
 }
