@@ -65,13 +65,13 @@ export default {
       msg:'',
       socket: null,
       showEmoji: false, //显示emoji弹框
-      heartCheck:{
-        timeout:5000,
-        timeoutObj:null,
-        serverTimeoutObj:null,
-        reset:this.heartCheckRest,
-        start:this.heartCheckStart
-      }
+      // heartCheck:{
+      //   timeout:5000,
+      //   timeoutObj:null,
+      //   serverTimeoutObj:null,
+      //   reset:this.heartCheckRest,
+      //   start:this.heartCheckStart
+      // }
     }
   },
   mounted() {
@@ -92,64 +92,64 @@ export default {
     },
     socketOpen(){
       console.log('链接成功')
-      this.heartCheck.reset()
-      this.heartCheck.start()
+      // this.heartCheck.reset()
+      // this.heartCheck.start()
     },
     socketError(e){
       console.error('发生错误')
       console.error(e)
-      this.socketReconnect()
+      // this.socketReconnect()
     },
     socketSend(){
       this.socket.send(this.msg)
     },
     socketGetMsg(msg){
       let data= JSON.parse(msg.data)
-      if (data.msgContent!='hb_request' && data.msgContent!='heartBeat'){
-        this.data.push(data)
-        this.heartCheck.reset()
-        this.heartCheck.start()
-      }
+      this.data.push(data)
+      // if (data.msgContent!='hb_request' && data.msgContent!='heartBeat'){
+        // this.heartCheck.reset()
+        // this.heartCheck.start()
+      // }
 
     },
     socketClose(){
       console.warn('链接关闭')
       this.heartCheck.reset()
-      this.socketReconnect()
+      // this.socketReconnect()
     },
-    heartCheckRest(){
-      this.heartCheck.timeoutObj=null
-      this.heartCheck.serverTimeoutObj=null
-    },
-    socketReconnect(){
-      var lockReconnect = false, tt;
-      if (lockReconnect) {
-        return;
-      }
-      lockReconnect = true;
-      tt && clearTimeout(tt);
-      let that=this
-      tt = setTimeout(function () {
-        console.log('重连中...');
-        lockReconnect = false;
-        that.socketInit();
-      }, 4000);
-    },
-    heartCheckStart(){
-      let self=this.heartCheck
-      this.heartCheck.timeout&&clearTimeout(this.heartCheck.timeoutObj)
-      this.heartCheck.serverTimeoutObj&&clearTimeout(this.heartCheck.serverTimeoutObj)
-      this.heartCheck.timeoutObj=setTimeout(()=>{
-        console.log('当前ws状态:'+this.socket.readyState)
-        if (this.socket.readyState !=1){
-          return
-        }
-        this.socket.send("heartBeat")
-        self.serverTimeoutObj=setTimeout(()=>{
-          this.socket.close()
-        },self.timeout)
-      },this.heartCheck.timeout)
-    },
+    // heartCheckRest(){
+    //   this.heartCheck.timeoutObj=null
+    //   this.heartCheck.serverTimeoutObj=null
+    // },
+    // socketReconnect(){
+    //   var lockReconnect = false, tt;
+    //   if (lockReconnect) {
+    //     return;
+    //   }
+    //   lockReconnect = true;
+    //   tt && clearTimeout(tt);
+    //   let that=this
+    //   tt = setTimeout(function () {
+    //     console.log('重连中...');
+    //     lockReconnect = false;
+    //     that.socketInit();
+    //   }, 4000);
+    // },
+    // heartCheckStart(){
+    //   let self=this.heartCheck
+    //   this.heartCheck.timeout&&clearTimeout(this.heartCheck.timeoutObj)
+    //   this.heartCheck.serverTimeoutObj&&clearTimeout(this.heartCheck.serverTimeoutObj)
+    //   this.heartCheck.timeoutObj=setTimeout(()=>{
+    //     console.log('当前ws状态:'+this.socket.readyState)
+    //     if (this.socket.readyState !=1){
+    //       return
+    //     }
+    //     this.socket.send("heartBeat")
+    //     self.serverTimeoutObj=setTimeout(()=>{
+    //       this.socket.close()
+    //     },self.timeout)
+    //   },this.heartCheck.timeout)
+    // },
     selectEmoji(e){
       this.msg+=e.data
     },
