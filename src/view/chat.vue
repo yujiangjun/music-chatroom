@@ -5,13 +5,13 @@
       <a-list item-layout="horizontal" :data-source="data">
         <a-list-item slot="renderItem" slot-scope="item">
           <a-list-item-meta
-              :description="item.time"
+              :description="item.msgContent.time"
           >
 <!--            <img src="item.msgContent" v-if="item.msgContent.indexOf('base64')>0" style="width: 20px;height: 20px"/>-->
-            <a slot="title">{{ item.msgContent }}</a>
+            <a slot="title">{{ item.msgContent.msgContent }}</a>
             <a-avatar
                 slot="avatar"
-                :src="item.avatar"
+                :src="item.sendUser.head"
             />
           </a-list-item-meta>
         </a-list-item>
@@ -55,6 +55,7 @@
 <script>
 import wsUrl from "@/api/base";
 // import {getImageBytes} from "@/utils";
+import {msgType} from "@/const";
 
 const data = [];
 export default {
@@ -65,6 +66,7 @@ export default {
       msg:'',
       socket: null,
       showEmoji: false, //显示emoji弹框
+      userInfo: {}
       // heartCheck:{
       //   timeout:5000,
       //   timeoutObj:null,
@@ -77,11 +79,12 @@ export default {
   mounted() {
     this.socketInit()
     window.onbeforeunload=()=>this.socket.close();
+    this.userInfo = this.$store.state.userInfo.payload
   },
   methods:{
     socketInit(){
       this.socket=new WebSocket(wsUrl)
-      this.socket.onpen=this.socketOpen
+      this.socket.onopen=this.socketOpen()
       this.socket.onerror=this.socketError
       this.socket.onmessage=this.socketGetMsg
       this.socket.onclose=this.socketClose
@@ -94,6 +97,15 @@ export default {
       console.log('链接成功')
       // this.heartCheck.reset()
       // this.heartCheck.start()
+      let msg ={
+        msgType: msgType.ON_LINE,
+        sendUser: this.$store.state.userInfo.payload
+      }
+      setTimeout(()=>{
+        console.log(this.socket)
+        this.socket.send(JSON.stringify(msg))
+      },1000)
+
     },
     socketError(e){
       console.error('发生错误')
@@ -101,7 +113,15 @@ export default {
       // this.socketReconnect()
     },
     socketSend(){
-      this.socket.send(this.msg)
+      let msgRequest={
+        msgType: msgType.TEXT_MSG,
+        sendUser: this.userInfo,
+        msgContent: {
+          msgContent: this.msg
+        }
+      }
+      console.log(this.$store.state.userInfo.payload)
+      this.socket.send(JSON.stringify(msgRequest))
     },
     socketGetMsg(msg){
       let data= JSON.parse(msg.data)
@@ -114,7 +134,7 @@ export default {
     },
     socketClose(){
       console.warn('链接关闭')
-      this.heartCheck.reset()
+      // this.heartCheck.reset()
       // this.socketReconnect()
     },
     // heartCheckRest(){

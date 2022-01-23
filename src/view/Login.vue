@@ -9,6 +9,7 @@
       >
         <a-form-item>
           <a-input
+              v-model="userName"
               v-decorator="[
           'userName',
           { rules: [{ required: true, message: 'Please input your username!' }] },
@@ -20,6 +21,7 @@
         </a-form-item>
         <a-form-item>
           <a-input
+              v-model="password"
               v-decorator="[
           'password',
           { rules: [{ required: true, message: 'Please input your Password!' }] },
@@ -79,8 +81,8 @@ export default {
           this.$store.commit({
             type: 'saveUserInfo',
             payload: {
-              userName: this.userName,
-              password: this.password
+              id: this.userName==='joe'?2:1,
+              name: this.userName
             }
           })
           this.$router.push({path:'/main'})
