@@ -1,6 +1,6 @@
 import HelloWorld from "@/components/HelloWorld";
 import VueRouter from "vue-router";
-import Test from '@/view/Test'
+import Login from '@/view/Login'
 import Main from '@/view/main'
 import Chat from '@/view/chat'
 import Repertoire from '@/view/repertoire'
@@ -8,7 +8,7 @@ import ChooseSong from '@/view/choose_song'
 
 const routes = [
     { path: '/hello', component: HelloWorld },
-    { path: '/test', component: Test },
+    { path: '/', component: Login },
     {
         path: '/main', component: Main,
         children:[
