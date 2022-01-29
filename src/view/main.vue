@@ -3,6 +3,10 @@
   <a-layout>
     <a-layout-sider style="max-width: 150px;width: 150px;min-width: 150px;height: calc(75vh)">
       <div style="width: 100%;width: 100%;display: flex;flex-direction: column;flex-wrap: wrap">
+        <a-avatar
+            :src="currentUser.head"
+            style="width: 49px;height: 50px;align-self: center;"
+        />
         <a-button type="primary" @click="()=>this.$router.push('/main/chooseSong')">
           点歌
         </a-button>
@@ -26,7 +30,12 @@
 
 <script>
 export default {
-  name: "main"
+  name: "main",
+  data(){
+    return{
+      currentUser:this.$store.state.userInfo.payload
+    }
+  }
 }
 </script>
 

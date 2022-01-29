@@ -8,7 +8,11 @@
               :description="item.msgContent.time"
           >
 <!--            <img src="item.msgContent" v-if="item.msgContent.indexOf('base64')>0" style="width: 20px;height: 20px"/>-->
-            <a slot="title">{{ item.msgContent.msgContent }}</a>
+            <div style="display: flex;" slot="title">
+              <b style="font-size: 20px">{{item.sendUser.name}}:</b>
+              <span>{{ item.msgContent.msgContent }}</span>
+            </div>
+<!--            <a slot="title">{{ item.msgContent.msgContent }}</a>-->
             <a-avatar
                 slot="avatar"
                 :src="item.sendUser.head"

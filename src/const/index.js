@@ -29,4 +29,7 @@ const msgType = {
     'NOTICE_MGS': 7
 }
 
-export {msgType}
+const defaultHeadUrl = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+const defaultHeadUrl2 = 'https://tse4-mm.cn.bing.net/th/id/OIP-C.dSP3nbHAvy4gbw-UQ2amSAAAAA?w=179&h=180&c=7&r=0&o=5&pid=1.7'
+
+export {msgType, defaultHeadUrl,defaultHeadUrl2}

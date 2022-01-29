@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import {defaultHeadUrl,defaultHeadUrl2} from "@/const";
 export default {
   name: "Login",
   beforeCreate() {
@@ -69,7 +70,8 @@ export default {
   data() {
     return{
       userName: '',
-      password: ''
+      password: '',
+      defaultHeadUrl
     }
   },
   methods: {
@@ -82,7 +84,8 @@ export default {
             type: 'saveUserInfo',
             payload: {
               id: this.userName==='joe'?2:1,
-              name: this.userName
+              name: this.userName,
+              head: this.userName==='joe'?defaultHeadUrl:defaultHeadUrl2
             }
           })
           this.$router.push({path:'/main'})
