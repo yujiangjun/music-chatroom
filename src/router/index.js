@@ -9,6 +9,7 @@ import ChooseSong from '@/view/choose_song'
 const routes = [
     { path: '/hello', component: HelloWorld },
     { path: '/', component: Login },
+
     {
         path: '/main', component: Main,
         children:[

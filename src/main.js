@@ -7,12 +7,15 @@ import VEmojiPicker  from "v-emoji-picker";
 import Vuex from 'vuex'
 
 import 'ant-design-vue/dist/antd.css';
+import Rest from './api/rest';
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(Antd)
 Vue.use(VEmojiPicker)
 Vue.use(Vuex)
+
+Vue.prototype.$axios=Rest
 
 const store = new Vuex.Store({
     state: {
@@ -28,9 +31,10 @@ const store = new Vuex.Store({
         }
     }
 })
-
+let axios = Rest
 new Vue({
   render: h => h(App),
   router,
-  store
+  store,
+    axios
 }).$mount('#app')

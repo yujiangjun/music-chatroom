@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "ant-design-vue": "^1.7.8",
+    "axios": "^0.25.0",
     "core-js": "^3.6.5",
     "si-grenoble": "^0.6.0",
     "v-emoji-picker": "^2.3.3",
