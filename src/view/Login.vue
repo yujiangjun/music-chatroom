@@ -10,10 +10,6 @@
         <a-form-item>
           <a-input
               v-model="userName"
-              v-decorator="[
-          'userName',
-          { rules: [{ required: true, message: 'Please input your username!' }] },
-        ]"
               placeholder="Username"
           >
             <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)" />
@@ -22,10 +18,6 @@
         <a-form-item>
           <a-input
               v-model="password"
-              v-decorator="[
-          'password',
-          { rules: [{ required: true, message: 'Please input your Password!' }] },
-        ]"
               type="password"
               placeholder="Password"
           >

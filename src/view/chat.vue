@@ -1,18 +1,16 @@
 <template>
 <div>
   <a-row style="height: 80%">
-    <a-col span="8">
+    <a-col span="10">
       <a-list item-layout="horizontal" :data-source="data">
         <a-list-item slot="renderItem" slot-scope="item">
           <a-list-item-meta
               :description="item.msgContent.time"
           >
-<!--            <img src="item.msgContent" v-if="item.msgContent.indexOf('base64')>0" style="width: 20px;height: 20px"/>-->
             <div style="display: flex;" slot="title">
               <b style="font-size: 20px">{{item.sendUser.name}}:</b>
               <span>{{ item.msgContent.msgContent }}</span>
             </div>
-<!--            <a slot="title">{{ item.msgContent.msgContent }}</a>-->
             <a-avatar
                 slot="avatar"
                 :src="item.sendUser.head"
@@ -21,9 +19,12 @@
         </a-list-item>
       </a-list>
     </a-col>
+    <a-col span="10" offset="2">
+      <player :play-url="playUrl" :song-mid="songMid" :albummid="albummid" v-if="playUrl" style="width: 100%"/>
+    </a-col>
   </a-row>
   <a-row>
-    <a-col span="17" offset="2">
+    <a-col span="8" offset="2">
       <div style="display: flex;flex-direction: column">
         <div style="display: flex">
           <a-upload
@@ -49,7 +50,7 @@
         <a-textarea placeholder="请输入。。。。" :rows="4" v-model="msg"/>
       </div>
     </a-col>
-    <a-col span="2" offset="1">
+    <a-col span="2">
       <a-button type="primary" style="border-radius: 5px" @click="sendMsg">发送</a-button>
     </a-col>
   </a-row>
@@ -58,19 +59,28 @@
 
 <script>
 import wsUrl from "@/api/base";
+import player from "@/view/player";
 // import {getImageBytes} from "@/utils";
 import {msgType} from "@/const";
+import Player from "@/view/player";
 
 const data = [];
 export default {
   name: "chat",
+  components: {Player},
+  comments:[
+    player
+  ],
   data(){
     return{
       data,
       msg:'',
       socket: null,
       showEmoji: false, //显示emoji弹框
-      userInfo: {}
+      userInfo: {},
+      playUrl:'',
+      albummid:'',
+      songMid:''
       // heartCheck:{
       //   timeout:5000,
       //   timeoutObj:null,
@@ -83,7 +93,11 @@ export default {
   mounted() {
     this.socketInit()
     window.onbeforeunload=()=>this.socket.close();
-    this.userInfo = this.$store.state.userInfo.payload
+    // this.userInfo = this.$store.state.userInfo.payload
+    this.userInfo = sessionStorage.getItem('userInfo')
+    this.playUrl=this.$route.query.playUrl
+    this.albummid=this.$route.query.albummid
+    this.songMid=this.$route.query.songMid
   },
   methods:{
     socketInit(){

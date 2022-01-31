@@ -3,6 +3,9 @@
   <img :src="cdImg" alt=""
        class="bg">
   <br>
+  <div id="showLyric" v-html="lyricHtml" v-if="lyricHtml" class="lycContainer">
+  </div>
+
   <!-- 此处的ref属性，可以很方便的在vue组件中通过 this.$refs.audio获取该dom元素 -->
   <audio ref="audio"
          @pause="onPause"
@@ -11,12 +14,8 @@
          @loadedmetadata="onLoadedmetadata"
          @ended="musicEnd"
          :src="src"
-         controls="controls">
+         controls="controls" style="width: 100%">
   </audio>
-
-  <div id="showLyric" v-html="lyricHtml" v-if="lyricHtml" class="lycContainer">
-  </div>
-
 </div>
 </template>
 
@@ -47,13 +46,15 @@ function realFormatSecond(second) {
 
 export default {
   name: "player",
+  props:[
+      'playUrl',
+      'albummid',
+      'songMid'
+  ],
   data () {
     return {
       src:'',
       cdImg:'',
-      playUrl:'',
-      albummid:'',
-      songMid: '',
       lyricStr: '',
       lyricHtml:'',
       lycContainerHeight :'',
@@ -68,11 +69,11 @@ export default {
     }
   },
   mounted() {
-    this.playUrl=this.$route.query.playUrl
+    // this.playUrl=this.$route.query.playUrl
+    // this.albummid=this.$route.query.albummid
+    // this.songMid=this.$route.query.songMid
     this.src=songPlayDomain+this.playUrl
-    this.albummid=this.$route.query.albummid
     this.cdImg=ablnumDomain+this.albummid+".jpg"
-    this.songMid=this.$route.query.songMid
     this.loadLyric()
   },
   methods: {
@@ -147,7 +148,7 @@ export default {
           lycId.previousSibling.removeAttribute("style");//因为每个id，都不一样。当前lycid播放时，移出上一个歌词样式
         }
         lycId.style.cssText =
-            "background: linear-gradient(-3deg,rgba(184,134,11,0.9) 0%,rgba(255,255,0,0.6) 60%);-webkit-background-clip: text;color: transparent;transform: scale(1.2);transition: all .5s ease-in;";//添加歌词样式
+            "background: #31c27c;-webkit-background-clip: text;color: transparent;transform: scale(1.2);transition: all .5s ease-in;";//添加歌词样式
       }
     },
     musicEnd() {

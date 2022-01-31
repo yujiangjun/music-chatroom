@@ -1,8 +1,50 @@
 <template>
 <div>
-  <a-row>
-    <a-col span="8" offset="8">
-      <a-input-search placeholder="搜索你要的歌曲" @search="onSearch"  v-model="search"/>
+  <a-row style="margin-top: 10px">
+    <a-col span="8" offset="8" style="display:flex;flex-direction: row;align-items: center">
+<!--      <a-input-search placeholder="搜索你要的歌曲" @search="onSearch"  v-model="search"/>-->
+      <a-auto-complete
+          class="certain-category-search"
+          dropdown-class-name="certain-category-search-dropdown"
+          :dropdown-match-select-width="false"
+          :dropdown-style="{ width: '300px' }"
+          size="large"
+          style="width: 100%"
+          placeholder="搜索你要的歌曲"
+          option-label-prop="value"
+          v-model="search"
+      >
+        <template slot="dataSource">
+          <a-select-opt-group v-for="group in searchHis" :key="group">
+<!--          <span slot="label">-->
+<!--            {{ group }}-->
+<!--            <a-->
+<!--                style="float: right"-->
+<!--                href="https://www.google.com/search?q=antd"-->
+<!--                target="_blank"-->
+<!--                rel="noopener noreferrer"-->
+<!--            >more-->
+<!--            </a>-->
+<!--          </span>-->
+            <a-select-option :key="group" :value="group">
+              {{ group }}
+<!--              <span class="certain-search-item-count">{{ group }}</span>-->
+            </a-select-option>
+          </a-select-opt-group>
+<!--          <a-select-option key="all" disabled class="show-all">-->
+<!--            <a-->
+<!--                href="https://www.google.com/search?q=ant-design-vue"-->
+<!--                target="_blank"-->
+<!--                rel="noopener noreferrer"-->
+<!--            >-->
+<!--              View all results-->
+<!--            </a>-->
+<!--          </a-select-option>-->
+        </template>
+      </a-auto-complete>
+      <a-button type="primary" style="margin-left: 10px" @click="onSearch">
+        搜索
+      </a-button>
     </a-col>
   </a-row>
 
@@ -24,24 +66,12 @@
       </a-list>
     </a-col>
   </a-row>
-
-<!--  <a-row>-->
-<!--    <a-col span="8">-->
-<!--      <img :src="topSongs.topinfo.MacDetailPicUrl" style="height: 200px"/>-->
-<!--    </a-col>-->
-<!--  </a-row>-->
-<!--  <a-row >-->
-<!--    <a-col span="8">-->
-<!--    </a-col>-->
-<!--    <a-col span="8" offset="4">-->
-<!--      <player cd-img="../assets/audio-bg1.png" src="https://dl.stream.qqmusic.qq.com/C400002O8tgh0Mx1iq.m4a?guid=6530133126&vkey=104CD16DD2295A6206483A56A617AFE781585316EC4190FB8F9F67208C3F3B2798170A00AB6C7479F668F6252E2CEC68293C3060144F6541&uin=&fromtag=66"></player>-->
-<!--    </a-col>-->
-<!--  </a-row>-->
 </div>
 </template>
 
 <script>
 import player from "@/view/player";
+import {getSearchHis} from "@/api/axios";
 // import Player from "@/view/player";
 export default {
   name: "choose_song",
@@ -50,6 +80,7 @@ export default {
   data(){
     return{
       search:'',
+      searchHis:[],
       // topSongs:null
       searchResult:null
     }
@@ -59,9 +90,13 @@ export default {
     //   console.log(resp.data)
     //   this.topSongs=resp.data
     // })
+    this.getSearchHis()
   },
   methods:{
     onSearch(){
+      if (!this.search){
+        return
+      }
       let q={
         key:this.search
       }
@@ -69,6 +104,7 @@ export default {
         this.searchResult=resp.data
         console.log(this.searchResult)
       })
+      // console.log(this.search)
     },
     onPlaySong(song){
       console.log(song)
@@ -77,15 +113,28 @@ export default {
       }
       this.$axios.getSongPlayUrl(q).then(resp=>{
         console.log(resp.data)
-        let routeData=this.$router.resolve({
-          path:'/player',
+        this.$router.push({
+          path:'chat',
           query:{
             albummid:song.albummid,
             playUrl:resp.data.req_0.data.midurlinfo[0].purl,
             songMid:song.songmid
           }
         })
-        window.open(routeData.href,'_blank')
+        // let routeData=this.$router.resolve({
+        //   path:'/player',
+        //   query:{
+        //     albummid:song.albummid,
+        //     playUrl:resp.data.req_0.data.midurlinfo[0].purl,
+        //     songMid:song.songmid
+        //   }
+        // })
+        // window.open(routeData.href,'_blank')
+      })
+    },
+    getSearchHis(){
+      getSearchHis().then(resp=>{
+        this.searchHis=resp.data
       })
     }
   }
