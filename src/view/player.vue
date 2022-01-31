@@ -9,11 +9,13 @@
          @play="onPlay"
          @timeupdate="onTimeupdate"
          @loadedmetadata="onLoadedmetadata"
+         @ended="musicEnd"
          :src="src"
          controls="controls">
-<!--         src="https://dl.stream.qqmusic.qq.com/C400002O8tgh0Mx1iq.m4a?guid=6530133126&vkey=104CD16DD2295A6206483A56A617AFE781585316EC4190FB8F9F67208C3F3B2798170A00AB6C7479F668F6252E2CEC68293C3060144F6541&uin=&fromtag=66"-->
-
   </audio>
+
+  <div id="showLyric" v-html="lyricHtml" v-if="lyricHtml" class="lycContainer">
+  </div>
 
 </div>
 </template>
@@ -21,6 +23,7 @@
 <script>
 
 import {songPlayDomain,ablnumDomain} from "@/const";
+import {parseLyric} from "@/utils";
 // import {getSongPlayUrl} from "@/api/axios";
 
 // 将整数转换成 时：分：秒的格式
@@ -50,6 +53,10 @@ export default {
       cdImg:'',
       playUrl:'',
       albummid:'',
+      songMid: '',
+      lyricStr: '',
+      lyricHtml:'',
+      lycContainerHeight :'',
       audio: {
         // 该字段是音频是否处于播放状态的属性
         playing: false,
@@ -65,9 +72,8 @@ export default {
     this.src=songPlayDomain+this.playUrl
     this.albummid=this.$route.query.albummid
     this.cdImg=ablnumDomain+this.albummid+".jpg"
-    console.log(this.src)
-    console.log(this.cdImg)
-
+    this.songMid=this.$route.query.songMid
+    this.loadLyric()
   },
   methods: {
     // 控制音频的播放与暂停
@@ -76,6 +82,10 @@ export default {
     },
     // 播放音频
     play () {
+      this.lycContainerHeight = document
+          .getElementsByClassName("lycContainer")[0]
+          .getBoundingClientRect()
+          .height.toFixed(0);
       this.$refs.audio.play()
     },
     // 暂停音频
@@ -95,6 +105,7 @@ export default {
       // console.log('timeupdate')
       // console.log(res)
       this.audio.currentTime = res.target.currentTime
+      this.lycMonitor()
     },
     // 当加载语音流元数据完成后，会触发该事件的回调函数
     // 语音元数据主要是语音的长度之类的数据
@@ -102,6 +113,52 @@ export default {
       // console.log('loadedmetadata')
       // console.log(res)
       this.audio.maxTime = parseInt(res.target.duration)
+    },
+    loadLyric(){
+      if (!this.songMid){
+        return
+      }
+      let q={
+        songMid:this.songMid
+      }
+      this.$axios.getSongLyric(q).then(resp=>{
+        this.lyricStr=resp.data.lyric
+        // console.log(this.lyricStr)
+        this.lyricHtml=parseLyric(this.lyricStr)
+      })
+    },
+    lycMonitor() {
+      //歌词监听滚动
+      // console.log('正在监听:'+this.audio.currentTime.toFixed(0))
+      let lycId = document.getElementById(this.audio.currentTime.toFixed(0));
+      if (lycId) {
+        if (lycId.offsetTop >
+            (
+                this.lycContainerHeight / 2 +
+                lycId.getBoundingClientRect().height
+            ).toFixed(0)
+        ) {
+          document.getElementsByClassName("lycContainer")[0].scrollTop = (
+              lycId.offsetTop -
+              this.lycContainerHeight / 2
+          ).toFixed(0);
+        }
+        if (lycId.previousSibling){
+          lycId.previousSibling.removeAttribute("style");//因为每个id，都不一样。当前lycid播放时，移出上一个歌词样式
+        }
+        lycId.style.cssText =
+            "background: linear-gradient(-3deg,rgba(184,134,11,0.9) 0%,rgba(255,255,0,0.6) 60%);-webkit-background-clip: text;color: transparent;transform: scale(1.2);transition: all .5s ease-in;";//添加歌词样式
+      }
+    },
+    musicEnd() {
+      document.getElementsByClassName("lycContainer")[0].lastChild.removeAttribute("style"); //删除最后一个p的style
+      let timer = setInterval(() => {
+        //匀速回到开头
+        document.getElementsByClassName("lycContainer")[0].scrollTop -= 10;
+        if (document.getElementsByClassName("lycContainer")[0].scrollTop == 0) {
+          clearInterval(timer);
+        }
+      }, 10);
     }
   },
   filters: {
@@ -113,12 +170,13 @@ export default {
     formatSecond(second = 0) {
       return realFormatSecond(second)
     }
-  }
+  },
+
 
 }
 </script>
 
-<style scoped>
+<style scoped >
 @keyframes rotate {
   0%{-webkit-transform:rotate(0deg);}
   25%{-webkit-transform:rotate(90deg);}
@@ -130,5 +188,18 @@ export default {
   animation: rotate 15s linear infinite;
   height: 200px;
   border-radius: 90px;
+}
+.lycContainer {
+  height: 500px;
+  padding: 0.625rem;
+  box-sizing: border-box;
+  font-size: 0.55rem;
+  text-align: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.lycContainer -webkit-scrollbar {
+  display: none;
 }
 </style>

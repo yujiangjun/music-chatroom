@@ -81,7 +81,8 @@ export default {
           path:'/player',
           query:{
             albummid:song.albummid,
-            playUrl:resp.data.req_0.data.midurlinfo[0].purl
+            playUrl:resp.data.req_0.data.midurlinfo[0].purl,
+            songMid:song.songmid
           }
         })
         window.open(routeData.href,'_blank')

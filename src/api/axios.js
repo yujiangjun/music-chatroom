@@ -89,3 +89,8 @@ export function getSongPlayUrl(songMid){
     let url="/music/getSongPlayUrl";
     return GetExample(url,songMid)
 }
+
+export function getSongLyric(songMid){
+    let url="/music/getLyric"
+    return GetExample(url,songMid)
+}
