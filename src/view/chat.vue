@@ -94,7 +94,7 @@ export default {
     this.socketInit()
     window.onbeforeunload=()=>this.socket.close();
     // this.userInfo = this.$store.state.userInfo.payload
-    this.userInfo = sessionStorage.getItem('userInfo')
+    this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
     this.playUrl=this.$route.query.playUrl
     this.albummid=this.$route.query.albummid
     this.songMid=this.$route.query.songMid
