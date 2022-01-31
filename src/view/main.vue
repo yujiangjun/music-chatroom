@@ -33,7 +33,7 @@ export default {
   name: "main",
   data(){
     return{
-      currentUser:this.$store.state.userInfo.payload
+      currentUser:JSON.parse(sessionStorage.getItem('userInfo'))
     }
   }
 }

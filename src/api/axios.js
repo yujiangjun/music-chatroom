@@ -79,3 +79,13 @@ export function getTopSongs(){
     let url="/music/getTopSongs"
     return GetExample(url,null)
 }
+
+export function searchMusic(key){
+    let url='/music/searchMusicList'
+    return GetExample(url,key)
+}
+
+export function getSongPlayUrl(songMid){
+    let url="/music/getSongPlayUrl";
+    return GetExample(url,songMid)
+}

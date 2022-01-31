@@ -1,6 +1,6 @@
 <template>
 <div>
-  <img src="../assets/audio-bg1.png" alt=""
+  <img :src="cdImg" alt=""
        class="bg">
   <br>
   <!-- 此处的ref属性，可以很方便的在vue组件中通过 this.$refs.audio获取该dom元素 -->
@@ -19,6 +19,10 @@
 </template>
 
 <script>
+
+import {songPlayDomain,ablnumDomain} from "@/const";
+// import {getSongPlayUrl} from "@/api/axios";
+
 // 将整数转换成 时：分：秒的格式
 function realFormatSecond(second) {
   var secondType = typeof second
@@ -40,12 +44,12 @@ function realFormatSecond(second) {
 
 export default {
   name: "player",
-  props:[
-      'src',
-      'cdImg'
-  ],
   data () {
     return {
+      src:'',
+      cdImg:'',
+      playUrl:'',
+      albummid:'',
       audio: {
         // 该字段是音频是否处于播放状态的属性
         playing: false,
@@ -55,6 +59,15 @@ export default {
         maxTime: 0
       }
     }
+  },
+  mounted() {
+    this.playUrl=this.$route.query.playUrl
+    this.src=songPlayDomain+this.playUrl
+    this.albummid=this.$route.query.albummid
+    this.cdImg=ablnumDomain+this.albummid+".jpg"
+    console.log(this.src)
+    console.log(this.cdImg)
+
   },
   methods: {
     // 控制音频的播放与暂停

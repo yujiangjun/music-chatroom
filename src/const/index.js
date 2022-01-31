@@ -31,5 +31,7 @@ const msgType = {
 
 const defaultHeadUrl = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
 const defaultHeadUrl2 = 'https://tse4-mm.cn.bing.net/th/id/OIP-C.dSP3nbHAvy4gbw-UQ2amSAAAAA?w=179&h=180&c=7&r=0&o=5&pid=1.7'
+const songPlayDomain="https://dl.stream.qqmusic.qq.com/";
+const ablnumDomain="http://y.gtimg.cn/music/photo_new/T002R180x180M000";
 
-export {msgType, defaultHeadUrl,defaultHeadUrl2}
+export {msgType, defaultHeadUrl,defaultHeadUrl2,songPlayDomain,ablnumDomain}

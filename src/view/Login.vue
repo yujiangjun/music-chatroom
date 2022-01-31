@@ -88,6 +88,12 @@ export default {
               head: this.userName==='joe'?defaultHeadUrl:defaultHeadUrl2
             }
           })
+          let user={
+            id: this.userName==='joe'?2:1,
+            name: this.userName,
+            head: this.userName==='joe'?defaultHeadUrl:defaultHeadUrl2
+          }
+          sessionStorage.setItem('userInfo',JSON.stringify(user))
           this.$router.push({path:'/main'})
         }
       });

@@ -1,5 +1,7 @@
-import {getTopSongs} from '@/api/axios'
+import {getSongPlayUrl, getTopSongs, searchMusic} from '@/api/axios'
 
 export default {
-    getTopSongs:()=>getTopSongs()
+    getTopSongs:()=>getTopSongs(),
+    searchMusic:(key)=>searchMusic(key),
+    getSongPlayUrl:(songMid)=>getSongPlayUrl(songMid)
 }
