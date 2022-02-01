@@ -46,6 +46,12 @@
           <a :href="githubAuth">
             <a-icon type="github" style="font-size: 20px"/>
           </a>
+          <a :href="giteeAuth" style="margin-left: 10px">
+<!--            <a-icon type="github" style="font-size: 20px"/>-->
+            <svg class="icon" aria-hidden="true" style="font-size: 20px">
+              <use xlink:href="#icon-gitee"></use>
+            </svg>
+          </a>
         </a-form-item>
       </a-form>
     </a-col>
@@ -53,7 +59,7 @@
 </template>
 
 <script>
-import {defaultHeadUrl,defaultHeadUrl2,githubAuth} from "@/const";
+import {defaultHeadUrl,defaultHeadUrl2,githubAuth,giteeAuth} from "@/const";
 export default {
   name: "Login",
   beforeCreate() {
@@ -64,7 +70,8 @@ export default {
       userName: '',
       password: '',
       defaultHeadUrl,
-      githubAuth
+      githubAuth,
+      giteeAuth
     }
   },
   methods: {
