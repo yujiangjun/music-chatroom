@@ -43,7 +43,7 @@
             Log in
           </a-button>
           第三方登录
-          <a :href="githubAuth" target="_blank">
+          <a :href="githubAuth">
             <a-icon type="github" style="font-size: 20px"/>
           </a>
         </a-form-item>

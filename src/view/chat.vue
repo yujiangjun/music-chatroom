@@ -93,8 +93,8 @@ export default {
   mounted() {
     this.socketInit()
     window.onbeforeunload=()=>this.socket.close();
-    // this.userInfo = this.$store.state.userInfo.payload
     this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+    console.log(this.userInfo)
     this.playUrl=this.$route.query.playUrl
     this.albummid=this.$route.query.albummid
     this.songMid=this.$route.query.songMid
@@ -117,7 +117,7 @@ export default {
       // this.heartCheck.start()
       let msg ={
         msgType: msgType.ON_LINE,
-        sendUser: this.$store.state.userInfo.payload
+        sendUser: JSON.parse(sessionStorage.getItem('userInfo'))
       }
       setTimeout(()=>{
         console.log(this.socket)
@@ -138,7 +138,6 @@ export default {
           msgContent: this.msg
         }
       }
-      console.log(this.$store.state.userInfo.payload)
       this.socket.send(JSON.stringify(msgRequest))
     },
     socketGetMsg(msg){

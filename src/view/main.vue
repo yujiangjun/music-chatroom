@@ -43,6 +43,7 @@ export default {
       head:this.$route.query.avatar
     }
     this.currentUser=user
+    console.log(this.currentUser)
     sessionStorage.setItem('userInfo',JSON.stringify(user))
   }
 }
