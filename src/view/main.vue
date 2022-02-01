@@ -33,8 +33,17 @@ export default {
   name: "main",
   data(){
     return{
-      currentUser:JSON.parse(sessionStorage.getItem('userInfo'))
+      currentUser:{}
     }
+  },
+  mounted() {
+    let user={
+      id:this.$route.query.uuid,
+      name:this.$route.query.nickname,
+      head:this.$route.query.avatar
+    }
+    this.currentUser=user
+    sessionStorage.setItem('userInfo',JSON.stringify(user))
   }
 }
 </script>

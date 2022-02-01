@@ -6,12 +6,13 @@ import Chat from '@/view/chat'
 import Repertoire from '@/view/repertoire'
 import ChooseSong from '@/view/choose_song'
 import player from "@/view/player";
+import test from "@/view/test"
 
 const routes = [
     { path: '/hello', component: HelloWorld },
     { path: '/', component: Login },
     { path: '/player', component: player },
-
+    { path: '/test',component: test},
     {
         path: '/main', component: Main,
         children:[

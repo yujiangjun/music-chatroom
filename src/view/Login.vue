@@ -42,9 +42,9 @@
           <a-button type="primary" html-type="submit" class="login-form-button">
             Log in
           </a-button>
-          Or
-          <a href="">
-            register now!
+          第三方登录
+          <a :href="githubAuth" target="_blank">
+            <a-icon type="github" style="font-size: 20px"/>
           </a>
         </a-form-item>
       </a-form>
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import {defaultHeadUrl,defaultHeadUrl2} from "@/const";
+import {defaultHeadUrl,defaultHeadUrl2,githubAuth} from "@/const";
 export default {
   name: "Login",
   beforeCreate() {
@@ -63,7 +63,8 @@ export default {
     return{
       userName: '',
       password: '',
-      defaultHeadUrl
+      defaultHeadUrl,
+      githubAuth
     }
   },
   methods: {

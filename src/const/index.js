@@ -34,4 +34,6 @@ const defaultHeadUrl2 = 'https://tse4-mm.cn.bing.net/th/id/OIP-C.dSP3nbHAvy4gbw-
 const songPlayDomain="https://dl.stream.qqmusic.qq.com/";
 const ablnumDomain="http://y.gtimg.cn/music/photo_new/T002R180x180M000";
 
-export {msgType, defaultHeadUrl,defaultHeadUrl2,songPlayDomain,ablnumDomain}
+const githubAuth="http://localhost:9090/auth/render"
+
+export {msgType, defaultHeadUrl,defaultHeadUrl2,songPlayDomain,ablnumDomain,githubAuth}
