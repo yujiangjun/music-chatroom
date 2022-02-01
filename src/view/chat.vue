@@ -9,7 +9,7 @@
           >
             <div style="display: flex;" slot="title">
               <b style="font-size: 20px">{{item.sendUser.name}}:</b>
-              <span>{{ item.msgContent.msgContent }}</span>
+              <div v-html="item.msgContent.msgContent"></div>
             </div>
             <a-avatar
                 slot="avatar"
@@ -28,11 +28,11 @@
       <div style="display: flex;flex-direction: column">
         <div style="display: flex">
           <a-upload
+              :customRequest="upload"
               name="file"
               listType="picture"
-              :before-upload="beforeUpload"
-              @change="uploadFile"
               style="display: flex"
+              :showUploadList="false"
           >
             <a-button type="primary" shape="circle" icon="cloud-upload"/>
           </a-upload>
@@ -58,7 +58,8 @@
 </template>
 
 <script>
-import wsUrl from "@/api/base";
+import {wsUrl,baseRestUrl} from "@/api/base";
+import {uploadFile} from "@/api/axios";
 import player from "@/view/player";
 // import {getImageBytes} from "@/utils";
 import {msgType} from "@/const";
@@ -80,7 +81,8 @@ export default {
       userInfo: {},
       playUrl:'',
       albummid:'',
-      songMid:''
+      songMid:'',
+      uploadUrl: baseRestUrl+'/oss/upload'
       // heartCheck:{
       //   timeout:5000,
       //   timeoutObj:null,
@@ -190,11 +192,26 @@ export default {
     selectEmoji(e){
       this.msg+=e.data
     },
-    uploadFile(info){
-      this.msg+=info.fileList[0].thumbUrl
-    },
-    beforeUpload(file){
-      console.log(typeof (file));
+    upload(file){
+      // file 是上传的文件 其内容会在放在下面截图中
+      // 后端需要接受的参数是 formData数据，
+      const form = new FormData()
+      form.append('file', file.file)
+      // uploadFile 我自己的接口
+      uploadFile(form).then(res => {
+        console.log(res)
+        if (res.code==200) {
+          // 调用组件内方法, 设置为成功状态
+          file.onSuccess(res, file.file)
+          file.status = 'done'
+          console.log(res.data)
+          let img=`<img src="${res.data}" style="width: 150px"></img>`
+          this.msg+=img
+        } else {
+          file.onError()
+          file.status = 'error'
+        }
+      })
     }
   }
 }

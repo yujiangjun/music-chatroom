@@ -62,15 +62,17 @@ function GetExample(url,params){
     })
 }
 
-// function PostExample(url,data){
-//     return new Promise((resolve, reject)=>{
-//         instance.post(url,data).then((resp)=>{
-//             resolve(resp.data)
-//         }).catch((error)=>{
-//             reject(error)
-//         })
-//     })
-// }
+function PostExample(url,data,header){
+    return new Promise((resolve, reject)=>{
+        instance.post(url,data,{
+            headers:header
+        }).then((resp)=>{
+            resolve(resp.data)
+        }).catch((error)=>{
+            reject(error)
+        })
+    })
+}
 
 /**
  * 获取音乐排行榜top100
@@ -98,4 +100,12 @@ export function getSongLyric(songMid){
 export function getSearchHis(){
     let url="/music/getSearchHis"
     return GetExample(url)
+}
+
+export function uploadFile(file){
+    let url="oss/upload"
+    let headers={
+        'Content-Type': 'multipart/form-data'
+    }
+    return PostExample(url,file,headers)
 }

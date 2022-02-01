@@ -87,7 +87,7 @@ export default {
             head: this.userName==='joe'?defaultHeadUrl:defaultHeadUrl2
           }
           sessionStorage.setItem('userInfo',JSON.stringify(user))
-          this.$router.push({path:'/main'})
+          this.$router.push({path:'/main',query:user})
         }
       });
     },
