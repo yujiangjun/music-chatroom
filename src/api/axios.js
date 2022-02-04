@@ -114,3 +114,8 @@ export function login(data){
     let url="login";
     return GetExample(url,data)
 }
+
+export function getRoomList(){
+    let url="room/getRoomList"
+    return GetExample(url)
+}

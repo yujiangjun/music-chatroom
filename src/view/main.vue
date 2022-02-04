@@ -1,7 +1,7 @@
 <template>
 <div id="components-layout-demo-basic">
   <a-layout>
-    <a-layout-sider style="max-width: 150px;width: 150px;min-width: 150px;height: calc(75vh)">
+    <a-layout-sider style="max-width: 150px;width: 150px;min-width: 150px;height: calc(80vh)">
       <div style="width: 100%;width: 100%;display: flex;flex-direction: column;flex-wrap: wrap">
         <a-avatar
             :src="currentUser.head"
@@ -18,7 +18,7 @@
         </a-button>
       </div>
     </a-layout-sider>
-    <a-layout style="height: calc(75vh)">
+    <a-layout style="height: calc(80vh)">
 
       <a-layout-content class="chat-top">
         <div>当前播放:<b>未播放</b></div>
@@ -27,8 +27,15 @@
           <span>房间:<b>默认房间</b></span>
         </div>
       </a-layout-content>
-      <a-layout-content style="height: 100%;width: 80%;background-color: white">
-        <router-view style="height: 100%"></router-view>
+      <a-layout-content style="height: 100%;">
+        <router-view style="height: 100%;"></router-view>
+<!--        <div style="width: 20%;background-color: bisque;display: flex;flex-direction: column;align-items: flex-start">-->
+<!--          <div v-for="item in roomList" :key="item.id">-->
+<!--            <img :src="item.roomImg" style="width: 40px;border-radius: 20px"/>-->
+<!--            <b style="margin-left: 15px">{{item.roomName}}</b>-->
+<!--            <a-button type="primary" style="margin-left: 15px" icon="enter" size="small">进入</a-button>-->
+<!--          </div>-->
+<!--        </div>-->
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -40,19 +47,32 @@ export default {
   name: "main",
   data(){
     return{
-      currentUser:{}
+      currentUser:{},
+      roomList:[]
     }
   },
   mounted() {
-    console.log(this.$route.query.name)
-    let user={
-      id:this.$route.query.id,
-      name:this.$route.query.nickName,
-      head:this.$route.query.head
+    if (this.$route.query.id
+    && this.$route.query.nickName
+    && this.$route.query.head) {
+      let user={
+        id:this.$route.query.id,
+        name:this.$route.query.nickName,
+        head:this.$route.query.head
+      }
+
+      console.log(user)
+      sessionStorage.setItem('userInfo',JSON.stringify(user))
     }
-    this.currentUser=user
-    console.log(user)
-    sessionStorage.setItem('userInfo',JSON.stringify(user))
+    this.currentUser=JSON.parse(sessionStorage.getItem('userInfo'))
+    this.getRoomList()
+  },
+  methods:{
+    getRoomList(){
+      this.$axios.getRoomList().then(res=>{
+        this.roomList=res.data
+      })
+    }
   }
 }
 </script>

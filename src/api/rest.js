@@ -1,4 +1,13 @@
-import {getSearchHis, getSongLyric, getSongPlayUrl, getTopSongs, login, searchMusic, uploadFile} from '@/api/axios'
+import {
+    getRoomList,
+    getSearchHis,
+    getSongLyric,
+    getSongPlayUrl,
+    getTopSongs,
+    login,
+    searchMusic,
+    uploadFile
+} from '@/api/axios'
 
 export default {
     getTopSongs:()=>getTopSongs(),
@@ -7,5 +16,6 @@ export default {
     getSongLyric:(songMid)=>getSongLyric(songMid),
     getSearchHis:()=>getSearchHis(),
     uploadFile:(file)=>uploadFile(file),
-    login:(data)=>login(data)
+    login:(data)=>login(data),
+    getRoomList:()=>getRoomList()
 }
