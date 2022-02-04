@@ -25,15 +25,7 @@
           </a-input>
         </a-form-item>
         <a-form-item>
-          <a-checkbox
-              v-decorator="[
-          'remember',
-          {
-            valuePropName: 'checked',
-            initialValue: true,
-          },
-        ]"
-          >
+          <a-checkbox>
             Remember me
           </a-checkbox>
           <a class="login-form-forgot" href="">
@@ -59,7 +51,7 @@
 </template>
 
 <script>
-import {defaultHeadUrl,defaultHeadUrl2,githubAuth,giteeAuth} from "@/const";
+import {defaultHeadUrl,githubAuth,giteeAuth} from "@/const";
 export default {
   name: "Login",
   beforeCreate() {
@@ -75,28 +67,23 @@ export default {
     }
   },
   methods: {
-    handleSubmit(e) {
-      e.preventDefault();
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values);
-          this.$store.commit({
-            type: 'saveUserInfo',
-            payload: {
-              id: this.userName==='joe'?2:1,
-              name: this.userName,
-              head: this.userName==='joe'?defaultHeadUrl:defaultHeadUrl2
-            }
-          })
-          let user={
-            id: this.userName==='joe'?2:1,
-            name: this.userName,
-            head: this.userName==='joe'?defaultHeadUrl:defaultHeadUrl2
-          }
-          sessionStorage.setItem('userInfo',JSON.stringify(user))
-          this.$router.push({path:'/main',query:user})
+    handleSubmit() {
+      // e.preventDefault();
+
+      let user={
+        name: this.userName,
+        pass: this.password,
+      }
+      this.$axios.login(user).then(resp=>{
+        console.log(resp)
+        if (resp.code!=200){
+          this.$message.error(resp.msg)
+        }else {
+          sessionStorage.setItem('userInfo',JSON.stringify(resp.data))
+          this.$router.push({path:'/main',query:resp.data})
         }
-      });
+      })
+
     },
   },
 }

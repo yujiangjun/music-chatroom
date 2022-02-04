@@ -109,3 +109,8 @@ export function uploadFile(file){
     }
     return PostExample(url,file,headers)
 }
+
+export function login(data){
+    let url="login";
+    return GetExample(url,data)
+}

@@ -37,13 +37,14 @@ export default {
     }
   },
   mounted() {
+    console.log(this.$route.query.name)
     let user={
-      id:this.$route.query.uuid,
-      name:this.$route.query.nickname,
-      head:this.$route.query.avatar
+      id:this.$route.query.id,
+      name:this.$route.query.nickName,
+      head:this.$route.query.head
     }
     this.currentUser=user
-    console.log(this.currentUser)
+    console.log(user)
     sessionStorage.setItem('userInfo',JSON.stringify(user))
   }
 }
