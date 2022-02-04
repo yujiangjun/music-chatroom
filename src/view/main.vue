@@ -14,13 +14,20 @@
           聊天
         </a-button>
         <a-button type="primary" @click="()=>this.$router.push('/main/repertoire')">
-          曲库
+          广场
         </a-button>
       </div>
     </a-layout-sider>
     <a-layout style="height: calc(75vh)">
 
-      <a-layout-content style="height: 100%">
+      <a-layout-content class="chat-top">
+        <div>当前播放:<b>未播放</b></div>
+        <div >当前人数:<b>1</b></div>
+        <div >
+          <span>房间:<b>默认房间</b></span>
+        </div>
+      </a-layout-content>
+      <a-layout-content style="height: 100%;width: 80%;background-color: white">
         <router-view style="height: 100%"></router-view>
       </a-layout-content>
     </a-layout>
@@ -71,5 +78,15 @@ export default {
 }
 #components-layout-demo-basic > .ant-layout:last-child {
   margin: 0;
+}
+
+.chat-top{
+  height: 30px;
+  background-color: white;
+  display: flex;
+  flex-direction: row-reverse;
+}
+.chat-top >div{
+  margin-right: 50px;
 }
 </style>
